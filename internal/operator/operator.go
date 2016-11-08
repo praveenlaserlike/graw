@@ -96,6 +96,8 @@ func (o *operator) Scrape(
 	[]*redditproto.Message,
 	error,
 ) {
+	fmt.Printf("In scrape: limit %d, after %s, before %s, path %s\n", limit, after, before, path)
+
 	bytes, err := o.exec(
 		http.Request{
 			Method:     "GET",

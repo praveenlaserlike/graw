@@ -164,7 +164,7 @@ func (b *base) Update(op operator.Operator) error {
 // sync fetches the current tip of a listing endpoint, so that grawbots crawling
 // forward in time don't treat it as a new post, or reprocess it when restarted.
 func (b *base) sync(op operator.Operator) error {
-	posts, messages, comments, err := op.Scrape(b.path, "", "", 1)
+	posts, messages, comments, err := op.Scrape(b.path, "", "", operator.MaxLinks)
 	if err != nil {
 		return err
 	}
