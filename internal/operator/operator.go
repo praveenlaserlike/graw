@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/turnage/graw/internal/operator/internal/client"
 	"github.com/turnage/redditproto"
@@ -98,6 +99,9 @@ func (o *operator) Scrape(
 ) {
 	fmt.Printf("In scrape: limit %d, after %s, before %s, path %s\n", limit, after, before, path)
 
+	// do a sleep to avoid throttling
+	time.Sleep(5 * time.Second)
+
 	bytes, err := o.exec(
 		http.Request{
 			Method:     "GET",
@@ -118,7 +122,12 @@ func (o *operator) Scrape(
 		return nil, nil, nil, err
 	}
 
-	return redditproto.ParseListing(bytes)
+	links, comments, messages, err := redditproto.ParseListing(bytes)
+
+	fmt.Printf("In scrape returned links: %d, comments: %d, messages: %d, err: %v\n",
+		len(links), len(comments), len(messages), err)
+
+	return links, comments, messages, err
 }
 
 // GetInfo retrieves info about a link
